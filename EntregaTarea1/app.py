@@ -1,15 +1,23 @@
+
+#region Imports
+
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import json
 
-# Configuración de SQLAlchemy
+#endregion
+
+#region Configuración de la base de datos
+
 Base = declarative_base()
 engine = create_engine('sqlite:///tareas.db') 
 Session = sessionmaker(bind=engine)
 session = Session()
+#endregion
 
-# Modelo de Tarea
+#region Modelo de la tarea y creación	
+
 class Tarea(Base):
     __tablename__ = 'tareas'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -17,10 +25,10 @@ class Tarea(Base):
     descripcion = Column(String, nullable=True)
     completada = Column(Boolean, default=False)
 
-# Crear las tablas en la base de datos
 Base.metadata.create_all(engine)
+#endregion
 
-# Función para agregar una tarea
+#region Metodos para manejo de la Tarea
 def agregar_tarea():
     titulo = input("Título de la tarea: ")
     descripcion = input("Descripción de la tarea: ")
@@ -29,7 +37,6 @@ def agregar_tarea():
     session.commit()
     print("Tarea agregada con éxito.")
 
-# Función para listar todas las tareas
 def listar_tareas():
     tareas = session.query(Tarea).all()
     if not tareas:
@@ -38,7 +45,6 @@ def listar_tareas():
         estado = "Completada" if tarea.completada else "Pendiente"
         print(f"[{tarea.id}] {tarea.titulo} - {estado}\nDescripción: {tarea.descripcion}")
 
-# Función para marcar una tarea como completada
 def marcar_completada():
     listar_tareas()
     tarea_id = int(input("ID de la tarea a marcar como completada: "))
@@ -50,7 +56,6 @@ def marcar_completada():
     else:
         print("Tarea no encontrada.")
 
-# Función para eliminar tareas completadas
 def eliminar_tareas_completadas():
     tareas_completadas = session.query(Tarea).filter_by(completada=True).all()
     if not tareas_completadas:
@@ -61,7 +66,6 @@ def eliminar_tareas_completadas():
         session.commit()
         print("Tareas completadas eliminadas.")
 
-# Función para guardar tareas en un archivo JSON
 def guardar_tareas():
     tareas = session.query(Tarea).all()
     tareas_dict = [
@@ -72,7 +76,6 @@ def guardar_tareas():
         json.dump(tareas_dict, archivo)
     print("Tareas guardadas en tareas.json.")
 
-# Función para cargar tareas desde un archivo JSON
 def cargar_tareas():
     try:
         with open("tareas.json", "r") as archivo:
@@ -89,9 +92,11 @@ def cargar_tareas():
     except FileNotFoundError:
         print("Archivo tareas.json no encontrado. No se cargaron tareas.")
 
-# Menú principal
+#endregion
+
+#region Menú principal
 def menu():
-    cargar_tareas()  # Cargar tareas al iniciar la aplicación
+    cargar_tareas()  
     while True:
         print("\nGestión de Tareas")
         print("1. Agregar tarea")
@@ -123,3 +128,5 @@ def menu():
 
 if __name__ == "__main__":
     menu()
+    
+#endregion
