@@ -127,6 +127,8 @@ class App:
                               completada=tarea_data["completada"])
                 session.merge(tarea)
             session.commit()
+            self.listar_tareas()
+
         except:
             messagebox.showinfo("Error", "No existen tareas en tareas.json")
             pass
