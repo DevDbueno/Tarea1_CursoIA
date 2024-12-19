@@ -1,7 +1,7 @@
 
 #region Imports
 
-from tkinter import Tk, Label, Button, Listbox, Scrollbar, Entry, END, messagebox, StringVar, Toplevel
+from tkinter import Tk, Label, Button, Listbox, Scrollbar, Entry, END, messagebox, Toplevel
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -52,7 +52,7 @@ class App:
         Button(self.root, text="Guardar en JSON", command=self.guardar_tareas).pack(pady=5)
         Button(self.root, text="Cargar desde JSON", command=self.cargar_tareas).pack(pady=5)
         Button(self.root, text="Salir", command=self.root.quit).pack(pady=5)
-
+        
         self.listar_tareas()
     def ventana_agregar(self):
         agregar_win = Toplevel(self.root)
